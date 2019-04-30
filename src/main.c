@@ -386,7 +386,8 @@ int* camino_BFS(grafo_t* grafo, char* vertice1, char* vertice2) {
 
 		lista_insertar_primero(cola_BFS, lista_iter_ver_actual(iter));
 		
-		if (padre[atoi((char*)lista_iter_ver_actual(iter))] == grafo_cantidad_vertices(grafo)) padre[atoi((char*)lista_iter_ver_actual(iter))] = atoi(vertice1);
+		if (padre[atoi((char*)lista_iter_ver_actual(iter))] == grafo_cantidad_vertices(grafo))
+			padre[atoi((char*)lista_iter_ver_actual(iter))] = atoi(vertice1);
 		
 		lista_iter_avanzar(iter);
 	}
@@ -411,7 +412,8 @@ int* camino_BFS(grafo_t* grafo, char* vertice1, char* vertice2) {
 
 					lista_insertar_ultimo(cola_BFS, lista_iter_ver_actual(iter_aux));
 					
-					if (padre[atoi((char*)lista_iter_ver_actual(iter_aux))] == grafo_cantidad_vertices(grafo)) padre[atoi((char*)lista_iter_ver_actual(iter_aux))] = atoi(vertice);
+					if (padre[atoi((char*)lista_iter_ver_actual(iter_aux))] == grafo_cantidad_vertices(grafo))
+						padre[atoi((char*)lista_iter_ver_actual(iter_aux))] = atoi(vertice);
 					
 					lista_iter_avanzar(iter_aux);
 				}
@@ -1250,7 +1252,8 @@ heap_t* calcular_subgrupos(grafo_t* grafo) {
  *          DIAMETRO
  * ****************************/
 
-// Devuelve una lista con los vertices que componen el camino maximo de todos los caminos minimos.
+// Devuelve una lista con los vertices que componen
+// el camino maximo de todos los caminos minimos.
 lista_t* calcular_diametro(grafo_t* grafo) {
 
 	vector_t* caminos = calcular_caminos(grafo);
@@ -1321,7 +1324,8 @@ void hashear_vertices(char* vertice, lista_t* adyacentes, int* h) {
 	lista_iter_destruir(iter);
 }
 
-float contar_cantidad_de_uniones(grafo_t* grafo, char* vertice, lista_t* adyacentes, lista_t* adyacentesA) {
+float contar_cantidad_de_uniones(grafo_t* grafo, char* vertice,
+			lista_t* adyacentes, lista_t* adyacentesA) {
 
 	float cont = 0.0;
 
@@ -1402,7 +1406,8 @@ float* agrupamiento_vertices(grafo_t* grafo) {
 	return clustering_v;
 }
 
-// Calcula el coeficiente de agrupamiento para todo el grafo a partir del de cada uno de los vertices.
+// Calcula el coeficiente de agrupamiento para todo el grafo
+// a partir del de cada uno de los vertices.
 float agrupamiento_total(grafo_t* grafo, float* clustering_v) {
 
 	float contador = 0;
@@ -1501,7 +1506,8 @@ void difundir(grafo_t* grafo, lista_t* lista) {
 	lista_t* difundidos = difundir_grafo(grafo, lista);
 
 	lista_iter_t* iter = lista_iter_crear(difundidos);
-	printf("La cantidad de musicos a los cuales se difundio la informacion es %d\n", (int)lista_largo(difundidos));
+	printf("La cantidad de musicos a los cuales se difundió la informacion es %d\n",
+			(int)lista_largo(difundidos));
 	printf("Estos musicos son:\n");
 
 	while (!lista_iter_al_final(iter)) {
@@ -1532,7 +1538,8 @@ void centralidad(grafo_t* grafo, lista_t* lista) {
 	while (!lista_iter_al_final(iter)) {
 
 		central_t* central = lista_iter_ver_actual(iter);
-		printf("Vertice: %d, Centralidad: %d\n", *central->vertice, *central->apariciones);
+		printf("Vertice: %d, Centralidad: %d\n",
+				*central->vertice, *central->apariciones);
 		lista_iter_avanzar(iter);
 	}
 
@@ -1627,7 +1634,9 @@ void subgrupos(grafo_t* grafo) {
 
 	heap_t* grupos = calcular_subgrupos(grafo);
 	
-	printf("La cantidad de subgrupos/componentes conexas es: %d\n", (int)heap_cantidad(grupos));
+	printf("La cantidad de subgrupos/componentes conexas es: %d\n",
+			(int)heap_cantidad(grupos));
+	
 	printf("Cantidad de musicos por subgrupo\n");
 
 	int i = 1;
@@ -1670,7 +1679,8 @@ void articulacion(grafo_t* grafo) {
 
 void agrupamiento(grafo_t* grafo) {
 
-	printf("El coeficiente de agrupamiento/clustering es %f\n", calcular_agrupamiento(grafo));
+	printf("El coeficiente de agrupamiento/clustering es %f\n",
+			calcular_agrupamiento(grafo));
 }
 
 /* ******************************************************************
