@@ -30,7 +30,8 @@ typedef struct central {
  *            ITOA
  * ****************************/
 
-// Convierte un entero a string. Fuente: http://newbiegeek.com/convertir-un-entero-a-cadena-de-caracteres-en-c/
+// Convierte un entero a string.
+// Fuente: http://newbiegeek.com/convertir-un-entero-a-cadena-de-caracteres-en-c/
 char* itoa(int val, int base) {
 
 	char* zero = "0";
@@ -233,7 +234,8 @@ bool* inicializar_visitados(grafo_t* grafo) {
 	return visita;
 }
 
-// Inicializa un arreglo con la cantidad de vertices en cada posicion para los padres.
+// Inicializa un arreglo con la
+// cantidad de vertices en cada posicion para los padres.
 int* inicializar_padre(grafo_t* grafo) {
 
 	int* padre = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
@@ -281,7 +283,9 @@ bool* inicializar_articulacion(grafo_t* grafo) {
 	return ptos_articulacion;
 }
 
-// Inicializa el contador en cero y registra los vertices donde se va plantar la informacion a difundir.
+// Inicializa el contador en cero y
+// registra los vértices donde se va
+// plantar la informacion a difundir.
 bool* inicializacion_difundir(lista_t* lista, int tam) {
 
 	bool* arreglo = malloc(sizeof(bool)*tam);
@@ -367,7 +371,8 @@ lista_t* *inicializar_rho(grafo_t* grafo) {
  *         CAMINO BFS
  * ****************************/
 
-// Realiza un recorrido BFS del grafo para encontrar el camino mínimo entre dos vertices.
+// Realiza un recorrido BFS del grafo para encontrar
+// el camino mínimo entre dos vertices.
 int* camino_BFS(grafo_t* grafo, char* vertice1, char* vertice2) {
 
 	lista_t* cola_BFS = lista_crear();
@@ -445,7 +450,8 @@ int* camino_BFS(grafo_t* grafo, char* vertice1, char* vertice2) {
 	return padre;
 }
 
-// Reconstruye el camino BFS a partir de un arreglo con los padres de cada vertice.
+// Reconstruye el camino BFS a partir
+// de un arreglo con los padres de cada vertice.
 lista_t* reconstruir_camino(int* padre, char* vertice1, char* vertice2) {
 
 	lista_t* lista = lista_crear();
@@ -483,7 +489,8 @@ lista_t* calcular_camino(grafo_t* grafo, char* vertice1, char* vertice2) {
 	return camino;
 }
 
-// Calcula todos los caminos minimos de todos los vertices entre todos los vertices.
+// Calcula todos los caminos minimos de
+// todos los vertices entre todos los vertices.
 vector_t* calcular_caminos(grafo_t* grafo) {
 
 	vector_t* vector_aux = vector_crear(grafo_cantidad_vertices(grafo)*grafo_cantidad_vertices(grafo));
@@ -532,7 +539,13 @@ int minimo(int a, int b) {
 	return b;
 }
 
-void DFS_articulacion(grafo_t* grafo, char* vertice, int* padre, bool* visitados, int* orden, int* mas_alto, int* contador) {
+void DFS_articulacion(grafo_t* grafo,
+			char* vertice,
+			int* padre,
+			bool* visitados,
+			int* orden,
+			int* mas_alto,
+			int* contador) {
 
 	visitados[atoi(vertice)] = true;
 	(*contador)++;
@@ -552,7 +565,8 @@ void DFS_articulacion(grafo_t* grafo, char* vertice, int* padre, bool* visitados
 
 		} else {
 
-			if (padre[atoi(vertice)] != atoi(w)) mas_alto[atoi(vertice)] = minimo(mas_alto[atoi(vertice)], orden[atoi(w)]);
+			if (padre[atoi(vertice)] != atoi(w))
+				mas_alto[atoi(vertice)] = minimo(mas_alto[atoi(vertice)], orden[atoi(w)]);
 		}
 
 		lista_iter_avanzar(iter);
@@ -634,7 +648,8 @@ int* calcular_centralidad(grafo_t* grafo) {
 
 			lista_iter_destruir(iter2);
 
-			if (strcmp(v,vertice) != 0) centralidad_b[atoi(v)] = centralidad_b[atoi(v)] + delta[atoi(v)];
+			if (strcmp(v,vertice) != 0)
+				centralidad_b[atoi(v)] = centralidad_b[atoi(v)] + delta[atoi(v)];
 		}
 
 		pila_destruir(pila);
@@ -656,7 +671,9 @@ int* calcular_centralidad(grafo_t* grafo) {
  *          ANALIZAR
  * ****************************/
 
-// Analiza la informacion difundida y devuelve una lista con los vertices en los cuales se difundio la misma.
+// Analiza la informacion difundida y
+// devuelve una lista con los vértices
+// en los cuales se difundio la misma.
 lista_t* analizar_informacion(bool* informacion, int tam) {
 
 	lista_t* lista = lista_crear();
@@ -708,7 +725,10 @@ int analizar_vertice(grafo_t* grafo, lista_t* cola_BFS, bool* visitados) {
 }
 
 // Analiza si un vertice debe enterarse de la informacion o no.
-void analizar_vertice_difundir(grafo_t* grafo, char* vertice, lista_t* adyacentes, bool* informacion) {
+void analizar_vertice_difundir(grafo_t* grafo,
+				char* vertice,
+				lista_t* adyacentes,
+				bool* informacion) {
 
 	int enterados = 0;
 
@@ -725,7 +745,8 @@ void analizar_vertice_difundir(grafo_t* grafo, char* vertice, lista_t* adyacente
 
 	lista_iter_destruir(iter);
 
-	if (enterados > grafo_cant_adyacentes(grafo, vertice)/2) informacion[atoi(vertice)] = true;
+	if (enterados > grafo_cant_adyacentes(grafo, vertice)/2)
+		informacion[atoi(vertice)] = true;
 }
 
 // Verifica si un vertice ya se enteró de la informacion a difundir.
@@ -739,7 +760,8 @@ void analizar_componente_a_difundir(grafo_t* grafo, lista_t* cola_BFS, char* ver
 
 	lista_t* adyacentes = grafo_adyacentes(grafo, vertice);
 
-	if (!difundido(informacion, vertice)) analizar_vertice_difundir(grafo, vertice, adyacentes, informacion);
+	if (!difundido(informacion, vertice))
+		analizar_vertice_difundir(grafo, vertice, adyacentes, informacion);
 
 	lista_iter_t* iter = lista_iter_crear(adyacentes);
 
@@ -773,14 +795,20 @@ void analizar_componente_a_difundir(grafo_t* grafo, lista_t* cola_BFS, char* ver
 			visitados[atoi(vertice_aux)] = true;
 		}
 
-		if (!difundido(informacion, vertice_aux)) analizar_vertice_difundir(grafo, vertice_aux, adyacentes_aux, informacion);
+		if (!difundido(informacion, vertice_aux))
+			analizar_vertice_difundir(grafo, vertice_aux, adyacentes_aux, informacion);
 
 		lista_destruir(adyacentes_aux, NULL);
 	}
 }
 
-// Cuenta cuantos hijos de un vertices del arbol DFS cumplen con la relacion que los convierte en puntos de articulacion.
-int contar_vertices(int* padre, int* orden, int* mas_alto, char* vertice, int tam) {
+// Cuenta cuántos hijos de un vértice del
+// arbol DFS cumplen con la relación que
+// los convierte en puntos de articulacion.
+int contar_vertices(int* padre, int* orden,
+			int* mas_alto,
+			char* vertice,
+			int tam) {
 
 	int  i = 0;
 	
@@ -788,15 +816,24 @@ int contar_vertices(int* padre, int* orden, int* mas_alto, char* vertice, int ta
 		
 		if (padre[j] == atoi(vertice)) {
 			
-			if (mas_alto[j] >= orden[atoi(vertice)]) i++;
+			if (mas_alto[j] >= orden[atoi(vertice)])
+				i++;
 		}
 	}
 
 	return i;
 }
 
-// Analiza que puntos son de articulacion a partir de la informacion proporcionada por el algoritmo de Tarjam.
-void analizar_articulacion(bool* puntos_articulacion, char* vertice, int* padre, int* orden, int* mas_alto, lista_t* vertices_grafo, int tam) {
+// Analiza qué puntos son de articulación
+// a partir de la información proporcionada
+// por el algoritmo de Tarjam.
+void analizar_articulacion(bool* puntos_articulacion,
+			   char* vertice,
+			   int* padre,
+			   int* orden,
+			   int* mas_alto,
+			   lista_t* vertices_grafo,
+			   int tam) {
 
 	char* vertice_aux;
 
@@ -829,7 +866,8 @@ void analizar_articulacion(bool* puntos_articulacion, char* vertice, int* padre,
 	lista_iter_destruir(iter);
 }
 
-// Devuelve un vertice no visitado aun a partir del arreglo de visitados.
+// Devuelve un vértice no visitado aún
+// a partir del arreglo de visitados.
 char* obtener_vertice(bool* visitados, size_t tam) {
 
 	size_t i = 0;
@@ -843,8 +881,12 @@ char* obtener_vertice(bool* visitados, size_t tam) {
 	return NULL;
 }
 
-// Analiza si hay puntos de articulacion en el grafo usando el algoritmo de Tarjam para numerar el grafo en recorrido DFS.
-// Tiene en cuenta las diferentes componenetes conexas, si es que las hay.
+// Analiza si hay puntos de articulación en el grafo
+// usando el algoritmo de Tarjam para numerar
+// el grafo en recorrido DFS.
+// 
+// Tiene en cuenta las diferentes
+// componenetes conexas, si es que las hay.
 bool* analizar_puntos(grafo_t* grafo) {
 
 	int tam = (int)grafo_cantidad_vertices(grafo);
@@ -879,7 +921,8 @@ bool* analizar_puntos(grafo_t* grafo) {
  *      AUXILIARES VARIAS
  * ****************************/
 
-// Crea una estructura central que contiene un vertice y la cantidad de veces que apaerece en los caminos minimos.
+// Crea una estructura central que contiene un vertice
+// y la cantidad de veces que apaerece en los caminos minimos.
 central_t* crear_central(int vertice, int apariciones) {
 
 	central_t* central = malloc(sizeof(central_t));
@@ -967,7 +1010,8 @@ lista_t* camino_diametro(vector_t* caminos) {
 	return lista;
 }
 
-// Devuelve una lista con los puntos de articulacion teniendo en cuenta un arreglo de bool.
+// Devuelve una lista con los puntos de articulación
+// teniendo en cuenta un arreglo de bool.
 lista_t* extraer_puntos(bool* puntos, int tam) {
 
 	lista_t* lista = lista_crear();
@@ -1026,7 +1070,10 @@ lista_t* extraer_mas_centrales(int* centrales, char* cantidad, int tam) {
 		j++;
 	}
 
-	/* Los desencola del heap y los inserta en una lista porque el heap es de minimos y tienen que salir en oreden decreciente*/
+	/* Los desencola del heap y los inserta en una lista
+	 * porque el heap es de minimos y tienen que
+	 * salir en oreden decreciente
+	 */
 	while (!heap_esta_vacio(heap_min)) {
 
 		lista_insertar_primero(lista, heap_desencolar(heap_min));
@@ -1077,7 +1124,10 @@ lista_t* posibles_recomendaciones(grafo_t* grafo, char* vertice) {
 }
 
 // Devuelve una lista con los vertices recomendados.
-lista_t* recomendados(grafo_t* grafo, char* vertice, char* cantidad, lista_t* posibles_recomend) {
+lista_t* recomendados(grafo_t* grafo,
+		      char* vertice,
+		      char* cantidad,
+		      lista_t* posibles_recomend) {
 
 	lista_t* lista = lista_crear();
 
@@ -1091,7 +1141,8 @@ lista_t* recomendados(grafo_t* grafo, char* vertice, char* cantidad, lista_t* po
 	
 	while (!lista_iter_al_final(iter)) {
 		
-		if (strcmp(lista_iter_ver_actual(iter), vertice) != 0 && !grafo_adyacente_pertence(grafo, vertice, lista_iter_ver_actual(iter))) {
+		if (strcmp(lista_iter_ver_actual(iter), vertice) != 0 &&
+				!grafo_adyacente_pertence(grafo, vertice, lista_iter_ver_actual(iter))) {
 			(arreglo_aux[atoi((char*)lista_iter_ver_actual(iter))])++;
 		}
 		
