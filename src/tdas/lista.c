@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-/* ******************************************************************
+/* *****************************************************************
  *                             LISTA
  * *****************************************************************/
 
@@ -121,7 +121,7 @@ void lista_destruir(lista_t *lista, void destruir_dato(void *)){
     free (lista);
 }
 
-/* ******************************************************************
+/* *****************************************************************
  *                             ITERADOR
  * *****************************************************************/
 
@@ -235,5 +235,52 @@ void lista_iterar(lista_t *lista, bool (*visitar)(void *dato, void *extra), void
             nsiguiente = nsiguiente->siguiente;
         }
     }
+}
+
+/* *****************************************************************
+ *                            UTILS
+ * *****************************************************************/
+
+// Une dos listas en una.
+lista_t* lista_union(lista_t* lista1, lista_t* lista_2) {
+
+	lista_iter_t* iter = lista_iter_crear(lista_2);
+	
+	while (!lista_iter_al_final(iter)) {
+
+		lista_insertar_ultimo(lista1, lista_iter_ver_actual(iter));
+		lista_iter_avanzar(iter);
+	}
+	
+	lista_iter_destruir(iter);
+	
+	return lista1;
+}
+
+// Copia el valor de un puntero a entero a otro.
+static int* copiar_dato(int* dato) {
+
+	int* dato_copiado = malloc(sizeof(int));
+	*dato_copiado = *dato;
+	
+	return dato_copiado;
+}
+
+// Copia una lista.
+lista_t* lista_copiar(lista_t* lista) {
+
+	lista_t* lista_aux = lista_crear();
+	lista_iter_t* iter = lista_iter_crear(lista);
+
+	while (!lista_iter_al_final(iter)) {
+
+		int* copia = copiar_dato(lista_iter_ver_actual(iter));
+		lista_insertar_ultimo(lista_aux, copia);
+		lista_iter_avanzar(iter);
+	}
+
+	lista_iter_destruir(iter);
+	
+	return lista_aux;
 }
 

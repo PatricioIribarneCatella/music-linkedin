@@ -10,6 +10,7 @@
 #include "hash.h"
 #include "grafo.h"
 
+#include "destruir.h"
 #include "parsing.h"
 #include "comandos.h"
 
@@ -25,6 +26,16 @@ typedef struct central {
 /* ******************************************************************
  *                       FUNCIONES AUXILIARES
  * *****************************************************************/
+
+// Destruye la estructura de central.
+void destruir_central(void* dato) {
+
+	central_t* central = (central_t*)dato;
+
+	free(central->vertice);
+	free(central->apariciones);
+	free(central);
+}
 
 /* *****************************
  *            ITOA
@@ -48,53 +59,6 @@ char* itoa(int val, int base) {
 }
 
 /* *****************************
- *       FUNCIONES LISTA
- * ****************************/
-
-// Une dos listas en una.
-lista_t* union_lista(lista_t* lista1, lista_t* lista_2) {
-
-	lista_iter_t* iter = lista_iter_crear(lista_2);
-	
-	while (!lista_iter_al_final(iter)) {
-
-		lista_insertar_ultimo(lista1, lista_iter_ver_actual(iter));
-		lista_iter_avanzar(iter);
-	}
-	
-	lista_iter_destruir(iter);
-	
-	return lista1;
-}
-
-// Copia el valor de un puntero a entero a otro.
-int* copiar_dato(int* dato) {
-
-	int* dato_copiado = malloc(sizeof(int));
-	*dato_copiado = *dato;
-	
-	return dato_copiado;
-}
-
-// Copia una lista.
-lista_t* copiar_lista(lista_t* lista) {
-
-	lista_t* lista_aux = lista_crear();
-	lista_iter_t* iter = lista_iter_crear(lista);
-
-	while (!lista_iter_al_final(iter)) {
-
-		int* copia = copiar_dato(lista_iter_ver_actual(iter));
-		lista_insertar_ultimo(lista_aux, copia);
-		lista_iter_avanzar(iter);
-	}
-
-	lista_iter_destruir(iter);
-	
-	return lista_aux;
-}
-
-/* *****************************
  *            VISITAR
  * ****************************/
 
@@ -111,62 +75,12 @@ bool todos_visitados(bool* visitados, size_t tam) {
 	
 	while (i < tam) {
 
-		if (!visitados[i]) return false;
+		if (!visitados[i])
+			return false;
 		i++;
 	}
 
 	return true;
-}
-
-/* *****************************
- *    DESTRUCCION DE DATOS
- * ****************************/
-
-// Destruye la linea leída por entrada estandar.
-void destruir_linea(lista_t* lista) {
-
-	lista_destruir(lista, free);
-}
-
-// Destruye un vector con listas alamcenadas.
-void destruir_vector(vector_t* vector) {
-
-	for (size_t i = 0; i < vector_obtener_cantidad(vector); i++) {
-		
-		lista_t* lista = vector_obtener(vector, i);
-		lista_destruir(lista, free);
-	}
-
-	vector_destruir(vector);
-}
-
-// Destruye la estructura de central.
-void destruir_central(void* dato) {
-
-	central_t* central = (central_t*)dato;
-
-	free(central->vertice);
-	free(central->apariciones);
-	free(central);
-}
-
-// Destruye los siguientes arreglos utilizados en puntos de articulacion.
-void destruir(int* padre, int* orden, int* mas_alto, int* contador) {
-
-	free(padre);
-	free(orden);
-	free(mas_alto);
-	free(contador);
-}
-
-// Destruye el parametro Rho.
-void destruir_rho(lista_t* *rho, int tam) {
-
-	for (int i = 0; i < tam; i++) {
-		lista_destruir(rho[i], NULL);
-	}
-	
-	free(rho);
 }
 
 /* *****************************
@@ -225,9 +139,11 @@ int cmp3(const void *a, const void *b) {
 // Inicializa un arreglo con false para los visitados.
 bool* inicializar_visitados(grafo_t* grafo) {
 
-	bool* visita = malloc(sizeof(bool)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	bool* visita = malloc(sizeof(bool)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		visita[i] = false;
 	}
 	
@@ -238,10 +154,12 @@ bool* inicializar_visitados(grafo_t* grafo) {
 // cantidad de vertices en cada posicion para los padres.
 int* inicializar_padre(grafo_t* grafo) {
 
-	int* padre = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	int* padre = malloc(sizeof(int)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
-		padre[i] = grafo_cantidad_vertices(grafo);
+	for (int i = 0; i < cant_vertices; i++) {
+		padre[i] = cant_vertices;
 	}
 	
 	return padre;
@@ -250,9 +168,11 @@ int* inicializar_padre(grafo_t* grafo) {
 // Inicializa un arreglo con ceros para el orden.
 int* inicializar_orden(grafo_t* grafo) {
 
-	int* orden = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	int* orden = malloc(sizeof(int)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		orden[i] = 0;
 	}
 	
@@ -262,9 +182,11 @@ int* inicializar_orden(grafo_t* grafo) {
 // Inicializa un arreglo con ceros para mas_alto.
 int* inicializar_mas_alto(grafo_t* grafo) {
 
-	int* mas_alto = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	int* mas_alto = malloc(sizeof(int)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		mas_alto[i] = 0;
 	}
 	
@@ -274,9 +196,11 @@ int* inicializar_mas_alto(grafo_t* grafo) {
 // Inicializa un arreglo con false para los puntos de articulacion.
 bool* inicializar_articulacion(grafo_t* grafo) {
 
-	bool* ptos_articulacion = malloc(sizeof(bool)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	bool* ptos_articulacion = malloc(sizeof(bool)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		ptos_articulacion[i] = false;
 	}
 	
@@ -310,9 +234,11 @@ bool* inicializacion_difundir(lista_t* lista, int tam) {
 // Inicializa un arreglo con 0 para la centralidad.
 int* inicializar_centralidad(grafo_t* grafo) {
 
-	int* arreglo = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	int* arreglo = malloc(sizeof(int)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		arreglo[i] = 0;
 	}
 	
@@ -322,9 +248,11 @@ int* inicializar_centralidad(grafo_t* grafo) {
 // Inicializa un arreglo con 0 para el parametro Sigma.
 int* inicializar_sigma(grafo_t* grafo) {
 
-	int* arreglo = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	int* arreglo = malloc(sizeof(int)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		arreglo[i] = 0;
 	}
 	
@@ -334,9 +262,11 @@ int* inicializar_sigma(grafo_t* grafo) {
 // Inicializa un arreglo con -1 para la distancia.
 int* inicializar_distancia(grafo_t* grafo) {
 
-	int* arreglo = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	int* arreglo = malloc(sizeof(int)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		arreglo[i] = -1;
 	}
 	
@@ -346,9 +276,11 @@ int* inicializar_distancia(grafo_t* grafo) {
 // Inicializa un arreglo con 0 para el parametro Delta.
 int* inicializar_delta(grafo_t* grafo) {
 
-	int* arreglo = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	int* arreglo = malloc(sizeof(int)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		arreglo[i] = 0;
 	}
 	
@@ -358,9 +290,11 @@ int* inicializar_delta(grafo_t* grafo) {
 // Inicializa un arreglo con listas vacias para el parametro Rho.
 lista_t* *inicializar_rho(grafo_t* grafo) {
 
-	lista_t* *arreglo = malloc(sizeof(lista_t*)*grafo_cantidad_vertices(grafo));
+	int cant_vertices = grafo_cantidad_vertices(grafo);
+
+	lista_t* *arreglo = malloc(sizeof(lista_t*)*cant_vertices);
 	
-	for (int i = 0; i < grafo_cantidad_vertices(grafo); i++) {
+	for (int i = 0; i < cant_vertices; i++) {
 		arreglo[i] = lista_crear();
 	}
 	
@@ -1005,7 +939,7 @@ lista_t* camino_diametro(vector_t* caminos) {
 	
 	lista_t* maximo = vector_obtener(caminos, pos_maximo);
 	
-	lista_t* lista = copiar_lista(maximo);
+	lista_t* lista = lista_copiar(maximo);
 	
 	return lista;
 }
@@ -1110,7 +1044,7 @@ lista_t* posibles_recomendaciones(grafo_t* grafo, char* vertice) {
 		
 		if (adyacentes_aux) {
 			
-			lista = union_lista(lista, adyacentes_aux);
+			lista = lista_union(lista, adyacentes_aux);
 			lista_destruir(adyacentes_aux, NULL);
 		}
 		

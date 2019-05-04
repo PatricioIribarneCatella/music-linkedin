@@ -114,4 +114,14 @@ void *lista_borrar(lista_t *lista, lista_iter_t *iter);
 // Post: realiza las acciones sobre cada elemento que posea la función visitar.
 void lista_iterar(lista_t *lista, bool (*visitar)(void *dato, void *extra), void *extra);
 
+/* *****************************************************************
+ *                            UTILS
+ * *****************************************************************/
+
+// Une dos listas
+lista_t* lista_union(lista_t* l1, lista_t* l2);
+
+// Copia una lista.
+lista_t* lista_copiar(lista_t* lista);
+
 #endif // LISTA_H
