@@ -21,4 +21,36 @@ void destruir_central(void* dato) {
 	free(central);
 }
 
+// Crea una estructura central que contiene un vertice
+// y la cantidad de veces que apaerece en los caminos minimos.
+central_t* crear_central(int vertice, int apariciones) {
+
+	central_t* central = malloc(sizeof(central_t));
+	
+	if (!central) return NULL;
+
+	central->vertice = malloc(sizeof(int));
+	
+	if (!central->vertice) {
+		
+		free(central);
+		return NULL;
+	}
+	
+	*central->vertice = vertice;
+
+	central->apariciones = malloc(sizeof(int));
+	
+	if (!central->apariciones) {
+		
+		free(central->vertice);
+		free(central);
+		
+		return NULL;
+	}
+
+	*central->apariciones = apariciones;
+
+	return central;
+}
 
