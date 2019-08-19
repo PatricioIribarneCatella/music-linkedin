@@ -34,3 +34,25 @@ lista_t* calcular_puntos_articulacion(grafo_t* grafo) {
 	return extraer_puntos(puntos, (int)grafo_cantidad_vertices(grafo));
 }
 
+// Devuelve una lista con los puntos de articulación
+// teniendo en cuenta un arreglo de bool.
+lista_t* extraer_puntos(bool* puntos, int tam) {
+
+	lista_t* lista = lista_crear();
+
+	for (int i = 0; i < tam; i++) {
+
+		if (puntos[i]) {
+
+			int* j = malloc(sizeof(int));
+			*j = i;
+			lista_insertar_primero(lista, j);
+		}
+	}
+
+	free(puntos);
+	
+	return lista;
+}
+
+

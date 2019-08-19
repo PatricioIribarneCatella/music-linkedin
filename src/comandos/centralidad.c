@@ -38,3 +38,91 @@ lista_t* centralidad_grafo(grafo_t* grafo, char* cantidad) {
 	return extraer_mas_centrales(centrales, cantidad, grafo_cantidad_vertices(grafo));
 }
 
+// Extrae a partir del arreglo de centrales la cantidad pedida.
+lista_t* extraer_mas_centrales(int* centrales, char* cantidad, int tam) {
+
+	lista_t* lista = lista_crear();
+	heap_t* heap_min = heap_crear(cmp1, atoi(cantidad));
+
+	/* Encola en el heap hasta que la cantidad sea la especificada */
+	int i = 0; int j = 0;
+	
+	while (i < atoi(cantidad)) {
+
+		if (centrales[j] != 0) {
+			
+			central_t* central = crear_central(j, centrales[j]);
+			heap_encolar(heap_min, central);
+			i++;
+		}
+		
+		j++;
+	}
+
+	/* Sigue iterando el arreglo y compara cada elemento con el tope del heap.
+		Si el elemento es mayor que el tope, se desencola el tope y se guarda el elemento.
+		Sino se descarta.
+	*/
+	while (j < tam) {
+
+		central_t* central = heap_ver_max(heap_min);
+		
+		if (centrales[j] > *(central->apariciones)) {
+			
+			destruir_central(heap_desencolar(heap_min));
+			central_t* central_aux = crear_central(j, centrales[j]);
+			heap_encolar(heap_min, central_aux);
+		}
+		
+		j++;
+	}
+
+	/* Los desencola del heap y los inserta en una lista
+	 * porque el heap es de minimos y tienen que
+	 * salir en oreden decreciente
+	 */
+	while (!heap_esta_vacio(heap_min)) {
+
+		lista_insertar_primero(lista, heap_desencolar(heap_min));
+	}
+
+	heap_destruir(heap_min, NULL);
+
+	free(centrales);
+	
+	return lista;
+}
+
+// Crea una estructura central que contiene un vertice
+// y la cantidad de veces que apaerece en los caminos minimos.
+central_t* crear_central(int vertice, int apariciones) {
+
+	central_t* central = malloc(sizeof(central_t));
+	
+	if (!central) return NULL;
+
+	central->vertice = malloc(sizeof(int));
+	
+	if (!central->vertice) {
+		
+		free(central);
+		return NULL;
+	}
+	
+	*central->vertice = vertice;
+
+	central->apariciones = malloc(sizeof(int));
+	
+	if (!central->apariciones) {
+		
+		free(central->vertice);
+		free(central);
+		
+		return NULL;
+	}
+
+	*central->apariciones = apariciones;
+
+	return central;
+}
+

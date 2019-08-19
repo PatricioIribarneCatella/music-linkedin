@@ -6,7 +6,7 @@ void difundir(grafo_t* grafo, lista_t* lista) {
 		return;
 	}
 
-	if (!verficar_vertices_a_difundir(lista, grafo)) {
+	if (!verificar_vertices_a_difundir(lista, grafo)) {
 		
 		printf("ERROR ALGUN MUSICO A DIFUNDIR NO EXISTE\n");
 		return;
@@ -69,4 +69,25 @@ lista_t* difundir_grafo(grafo_t* grafo, lista_t* lista) {
 	return difundidos;
 }
 
+// Verifica que los vertices a difundir pertenezcan al grafo.
+bool verificar_vertices_a_difundir(lista_t* lista, grafo_t* grafo) {
+
+	lista_iter_t* iter = lista_iter_crear(lista);
+
+	while (!lista_iter_al_final(iter)) {
+
+		if (!grafo_pertence(grafo, lista_iter_ver_actual(iter))) {
+			
+			lista_iter_destruir(iter);
+			
+			return false;
+		}
+
+		lista_iter_avanzar(iter);
+	}
+
+	lista_iter_destruir(iter);
+	
+	return true;
+}
 
