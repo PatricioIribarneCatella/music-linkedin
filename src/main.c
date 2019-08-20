@@ -1,22 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
 
-#include "vector.h"
 #include "lista.h"
-#include "pila.h"
-#include "heap.h"
-#include "hash.h"
 #include "grafo.h"
 
 #include "destruir.h"
+#include "lectura.h"
+#include "procesar.h"
 #include "parsing.h"
-#include "comandos.h"
 
-/* ******************************************************************
- *                         Music-LinkeIn
- * *****************************************************************/
+/* **********************************************
+ *                Music-LinkeIn
+ * **********************************************/
 
 void linkedin() {
 
