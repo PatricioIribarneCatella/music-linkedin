@@ -1,3 +1,9 @@
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "grafo.h"
+#include "lista.h"
+
 /* *****************************
  *       INICIALIZACION
  * ****************************/

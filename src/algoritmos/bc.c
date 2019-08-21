@@ -1,3 +1,11 @@
+#include <stdlib.h>
+#include <string.h>
+
+#include "grafo.h"
+#include "lista.h"
+
+#include "incializar.h"
+
 /* *****************************
  *     BRANDES (Centralidad)
  * ****************************/

@@ -1,3 +1,11 @@
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "grafo.h"
+#include "lista.h"
+
+#include "visitar.h"
+
 /* **********************************************
  *    DFS (articulación) Algoritmo de Tarjam
  * *********************************************/
