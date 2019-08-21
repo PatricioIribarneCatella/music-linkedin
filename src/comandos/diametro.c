@@ -1,24 +1,11 @@
-void diametro(grafo_t* grafo) {
+#include <stdio.h>
+#include <stdlib.h>
 
-	lista_t* camino_diametro = calcular_diametro(grafo);
-	lista_iter_t* iter = lista_iter_crear(camino_diametro);
+#include "grafo.h"
+#include "lista.h"
+#include "vector.h"
 
-	printf("El diametro es %d\n", (int)lista_largo(camino_diametro)-1);
-	printf("Los músicos que componen el camino son:\n");
-
-	while (!lista_iter_al_final(iter)) {
-		
-		printf("%d\n", *(int*)lista_iter_ver_actual(iter));
-		lista_iter_avanzar(iter);
-	}
-	
-	lista_iter_destruir(iter);
-	lista_destruir(camino_diametro, free);
-}
-
-/* *****************************
- *          DIAMETRO
- * ****************************/
+#include "bfs.h"
 
 // Devuelve una lista con los vertices que componen
 // el camino maximo de todos los caminos minimos.
@@ -64,6 +51,28 @@ int camino_maximo(vector_t* caminos) {
 	}
 
 	return pos;
+}
+
+/* *****************************
+ *          DIAMETRO
+ * ****************************/
+
+void diametro(grafo_t* grafo) {
+
+	lista_t* camino_diametro = calcular_diametro(grafo);
+	lista_iter_t* iter = lista_iter_crear(camino_diametro);
+
+	printf("El diametro es %d\n", (int)lista_largo(camino_diametro)-1);
+	printf("Los músicos que componen el camino son:\n");
+
+	while (!lista_iter_al_final(iter)) {
+		
+		printf("%d\n", *(int*)lista_iter_ver_actual(iter));
+		lista_iter_avanzar(iter);
+	}
+	
+	lista_iter_destruir(iter);
+	lista_destruir(camino_diametro, free);
 }
 
 

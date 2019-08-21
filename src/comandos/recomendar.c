@@ -1,64 +1,13 @@
-void recomendar(grafo_t* grafo, lista_t* lista) {
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-	char* vertice = lista_borrar_primero(lista);
-	
-	if (!vertice) {
-		
-		printf("ERROR VERTICE INVALIDO\n");
-		return;
-	}
-
-	char* cantidad = lista_borrar_primero(lista);
-	
-	if (!cantidad) {
-		
-		free(vertice);
-		printf("ERROR CANTIDAD INVALIDA\n");
-		
-		return;
-	}
-
-	if (atoi(cantidad) == 0) {
-		
-		free(cantidad);
-		free(vertice);
-		printf("ERROR CANTIDAD INVALIDA\n");
-		
-		return;
-	}
-
-	lista_t* recomendados = recomendaciones(grafo, vertice, cantidad);
-
-	if (lista_esta_vacia(recomendados)) {
-		
-		lista_destruir(recomendados, NULL);
-		printf("NO HAY MUSICOS PARA RECOMENDAR\n");
-		free(vertice);
-		free(cantidad);
-		
-		return;
-	}
-
-	lista_iter_t* iter = lista_iter_crear(recomendados);
-	printf("Las recomendaciones para el musico %s son:\n", vertice);
-
-	while (!lista_iter_al_final(iter)) {
-		
-		printf("%d\n", *(int*)lista_iter_ver_actual(iter));
-		lista_iter_avanzar(iter);
-	}
-
-	lista_iter_destruir(iter);
-	lista_destruir(recomendados, free);
-	free(vertice);
-	free(cantidad);
-}
-/* *****************************
- *          RECOMENDAR
- * ****************************/
+#include "grafo.h"
+#include "lista.h"
+#include "heap.h"
 
 // Devuelve una lista con las posibles recomendaciones para el vertice.
-lista_t* posibles_recomendaciones(grafo_t* grafo, char* vertice) {
+static lista_t* posibles_recomendaciones(grafo_t* grafo, char* vertice) {
 
 	lista_t* lista = lista_crear();
 
@@ -87,7 +36,7 @@ lista_t* posibles_recomendaciones(grafo_t* grafo, char* vertice) {
 }
 
 // Devuelve una lista con los vertices recomendados.
-lista_t* recomendados(grafo_t* grafo,
+static lista_t* recomendados(grafo_t* grafo,
 		      char* vertice,
 		      char* cantidad,
 		      lista_t* posibles_recomend) {
@@ -158,7 +107,7 @@ lista_t* recomendados(grafo_t* grafo,
 }
 
 // Devuelve una lista con los vertices a recomendar.
-lista_t* recomendaciones(grafo_t* grafo, char* vertice, char* cantidad) {
+static lista_t* recomendaciones(grafo_t* grafo, char* vertice, char* cantidad) {
 
 	lista_t* posibles_recomendados = posibles_recomendaciones(grafo, vertice);
 
@@ -169,4 +118,63 @@ lista_t* recomendaciones(grafo_t* grafo, char* vertice, char* cantidad) {
 	return recomendados(grafo, vertice, cantidad, posibles_recomendados);
 }
 
+/* *****************************
+ *          RECOMENDAR
+ * ****************************/
+
+void recomendar(grafo_t* grafo, lista_t* lista) {
+
+	char* vertice = lista_borrar_primero(lista);
+	
+	if (!vertice) {
+		
+		printf("ERROR VERTICE INVALIDO\n");
+		return;
+	}
+
+	char* cantidad = lista_borrar_primero(lista);
+	
+	if (!cantidad) {
+		
+		free(vertice);
+		printf("ERROR CANTIDAD INVALIDA\n");
+		
+		return;
+	}
+
+	if (atoi(cantidad) == 0) {
+		
+		free(cantidad);
+		free(vertice);
+		printf("ERROR CANTIDAD INVALIDA\n");
+		
+		return;
+	}
+
+	lista_t* recomendados = recomendaciones(grafo, vertice, cantidad);
+
+	if (lista_esta_vacia(recomendados)) {
+		
+		lista_destruir(recomendados, NULL);
+		printf("NO HAY MUSICOS PARA RECOMENDAR\n");
+		free(vertice);
+		free(cantidad);
+		
+		return;
+	}
+
+	lista_iter_t* iter = lista_iter_crear(recomendados);
+	printf("Las recomendaciones para el musico %s son:\n", vertice);
+
+	while (!lista_iter_al_final(iter)) {
+		
+		printf("%d\n", *(int*)lista_iter_ver_actual(iter));
+		lista_iter_avanzar(iter);
+	}
+
+	lista_iter_destruir(iter);
+	lista_destruir(recomendados, free);
+	free(vertice);
+	free(cantidad);
+}
 

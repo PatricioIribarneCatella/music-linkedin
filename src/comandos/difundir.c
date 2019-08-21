@@ -1,3 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#include "grafo.h"
+#include "lista.h"
+
+#include "analizar.h"
+
+// Defunde la informacion en el grafo.
+static bool* difundir_informacion(grafo_t* grafo, lista_t* lista, int tam) {
+
+	bool* informacion = inicializacion_difundir(lista, tam);
+
+	bool* visitados = inicializar_visitados(grafo);
+
+	lista_t* cola_BFS = lista_crear();
+
+	while (!todos_visitados(visitados, grafo_cantidad_vertices(grafo))) {
+
+		char* vertice = obtener_vertice(visitados, grafo_cantidad_vertices(grafo));
+
+		visitados[atoi(vertice)] = true;
+
+		analizar_componente_a_difundir(grafo, cola_BFS, vertice, visitados, informacion);
+	}
+
+	lista_destruir(cola_BFS, NULL);
+
+	free(visitados);
+
+	return informacion;
+}
+
+// Devuelve una lista con los vertices en los cuales se difundio la informacion.
+static lista_t* difundir_grafo(grafo_t* grafo, lista_t* lista) {
+
+	int tam = (int)grafo_cantidad_vertices(grafo);
+
+	bool* informacion = difundir_informacion(grafo, lista, tam);
+
+	lista_t* difundidos = analizar_informacion(informacion, tam);
+
+	return difundidos;
+}
+
+// Verifica que los vertices a difundir pertenezcan al grafo.
+static bool verificar_vertices_a_difundir(lista_t* lista, grafo_t* grafo) {
+
+	lista_iter_t* iter = lista_iter_crear(lista);
+
+	while (!lista_iter_al_final(iter)) {
+
+		if (!grafo_pertence(grafo, lista_iter_ver_actual(iter))) {
+			
+			lista_iter_destruir(iter);
+			
+			return false;
+		}
+
+		lista_iter_avanzar(iter);
+	}
+
+	lista_iter_destruir(iter);
+	
+	return true;
+}
+
+/* *****************************
+ *          DIFUNDIR
+ * ****************************/
+
 void difundir(grafo_t* grafo, lista_t* lista) {
 
 	if (!lista_ver_primero(lista)) {
@@ -27,67 +99,5 @@ void difundir(grafo_t* grafo, lista_t* lista) {
 
 	lista_iter_destruir(iter);
 	lista_destruir(difundidos, free);
-}
-/* *****************************
- *          DIFUNDIR
- * ****************************/
-
-// Defunde la informacion en el grafo.
-bool* difundir_informacion(grafo_t* grafo, lista_t* lista, int tam) {
-
-	bool* informacion = inicializacion_difundir(lista, tam);
-
-	bool* visitados = inicializar_visitados(grafo);
-
-	lista_t* cola_BFS = lista_crear();
-
-	while (!todos_visitados(visitados, grafo_cantidad_vertices(grafo))) {
-
-		char* vertice = obtener_vertice(visitados, grafo_cantidad_vertices(grafo));
-
-		visitados[atoi(vertice)] = true;
-
-		analizar_componente_a_difundir(grafo, cola_BFS, vertice, visitados, informacion);
-	}
-
-	lista_destruir(cola_BFS, NULL);
-
-	free(visitados);
-
-	return informacion;
-}
-
-// Devuelve una lista con los vertices en los cuales se difundio la informacion.
-lista_t* difundir_grafo(grafo_t* grafo, lista_t* lista) {
-
-	int tam = (int)grafo_cantidad_vertices(grafo);
-
-	bool* informacion = difundir_informacion(grafo, lista, tam);
-
-	lista_t* difundidos = analizar_informacion(informacion, tam);
-
-	return difundidos;
-}
-
-// Verifica que los vertices a difundir pertenezcan al grafo.
-bool verificar_vertices_a_difundir(lista_t* lista, grafo_t* grafo) {
-
-	lista_iter_t* iter = lista_iter_crear(lista);
-
-	while (!lista_iter_al_final(iter)) {
-
-		if (!grafo_pertence(grafo, lista_iter_ver_actual(iter))) {
-			
-			lista_iter_destruir(iter);
-			
-			return false;
-		}
-
-		lista_iter_avanzar(iter);
-	}
-
-	lista_iter_destruir(iter);
-	
-	return true;
 }
 

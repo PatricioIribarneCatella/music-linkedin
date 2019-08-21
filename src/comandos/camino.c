@@ -1,3 +1,15 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "grafo.h"
+#include "lista.h"
+
+#include "bfs.h"
+
+/* **************
+ *    CAMINO
+ * **************/
+
 void camino(grafo_t* grafo, lista_t* lista) {
 
 	char* vertice1 = lista_borrar_primero(lista);

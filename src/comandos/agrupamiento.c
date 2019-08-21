@@ -1,15 +1,12 @@
-void agrupamiento(grafo_t* grafo) {
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-	printf("El coeficiente de agrupamiento/clustering es %f\n",
-			calcular_agrupamiento(grafo));
-}
-
-/* *****************************
- *        AGRUPAMIENTO
- * ****************************/
+#include "grafo.h"
+#include "lista.h"
 
 // Inicializa un arreglo con ceros para el clustering
-float* inicializar_clustering(grafo_t* grafo) {
+static float* inicializar_clustering(grafo_t* grafo) {
 
 	float* arreglo = malloc(sizeof(float)*grafo_cantidad_vertices(grafo));
 	
@@ -21,7 +18,7 @@ float* inicializar_clustering(grafo_t* grafo) {
 }
 
 // Inicializa un arreglo con ceros para el hash
-int* inicializar_hash(grafo_t* grafo) {
+static int* inicializar_hash(grafo_t* grafo) {
 
 	int* arreglo = malloc(sizeof(int)*grafo_cantidad_vertices(grafo));
 
@@ -33,7 +30,7 @@ int* inicializar_hash(grafo_t* grafo) {
 }
 
 // Hashea vertices para luego contar las uniones entre ellos
-void hashear_vertices(char* vertice, lista_t* adyacentes, int* h) {
+static void hashear_vertices(char* vertice, lista_t* adyacentes, int* h) {
 
 	lista_iter_t* iter = lista_iter_crear(adyacentes);
 
@@ -52,7 +49,7 @@ void hashear_vertices(char* vertice, lista_t* adyacentes, int* h) {
 	lista_iter_destruir(iter);
 }
 
-float contar_cantidad_de_uniones(grafo_t* grafo, char* vertice,
+static float contar_cantidad_de_uniones(grafo_t* grafo, char* vertice,
 			lista_t* adyacentes, lista_t* adyacentesA) {
 
 	float cont = 0.0;
@@ -74,7 +71,7 @@ float contar_cantidad_de_uniones(grafo_t* grafo, char* vertice,
 }
 
 // Calcula cuantas uniones hay entre los vertices adyacentes a otro.
-float uniones_adyacentes(grafo_t* grafo, char* vertice, lista_t* adyacentes) {
+static float uniones_adyacentes(grafo_t* grafo, char* vertice, lista_t* adyacentes) {
 
 	float contador = 0.0;
 
@@ -99,7 +96,7 @@ float uniones_adyacentes(grafo_t* grafo, char* vertice, lista_t* adyacentes) {
 }
 
 // Calacula el coeficiente de agrupamiento para cada verice del grafo.
-float* agrupamiento_vertices(grafo_t* grafo) {
+static float* agrupamiento_vertices(grafo_t* grafo) {
 
 	float* clustering_v = inicializar_clustering(grafo);
 
@@ -136,7 +133,7 @@ float* agrupamiento_vertices(grafo_t* grafo) {
 
 // Calcula el coeficiente de agrupamiento para todo el grafo
 // a partir del de cada uno de los vertices.
-float agrupamiento_total(grafo_t* grafo, float* clustering_v) {
+static float agrupamiento_total(grafo_t* grafo, float* clustering_v) {
 
 	float contador = 0;
 
@@ -150,10 +147,20 @@ float agrupamiento_total(grafo_t* grafo, float* clustering_v) {
 }
 
 // Calcula el coeficiente de agrupamiento/clustering del grafo.
-float calcular_agrupamiento(grafo_t* grafo) {
+static float calcular_agrupamiento(grafo_t* grafo) {
 
 	float* clustering_v = agrupamiento_vertices(grafo);
 
 	return agrupamiento_total(grafo, clustering_v);
+}
+
+/* *****************************
+ *        AGRUPAMIENTO
+ * ****************************/
+
+void agrupamiento(grafo_t* grafo) {
+
+	printf("El coeficiente de agrupamiento/clustering es %f\n",
+			calcular_agrupamiento(grafo));
 }
 

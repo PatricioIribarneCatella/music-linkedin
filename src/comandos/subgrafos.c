@@ -1,28 +1,9 @@
-void subgrupos(grafo_t* grafo) {
+#include <stdio.h>
+#include <stdlib.h>
 
-	heap_t* grupos = calcular_subgrupos(grafo);
-	
-	printf("La cantidad de subgrupos/componentes conexas es: %d\n",
-			(int)heap_cantidad(grupos));
-	
-	printf("Cantidad de musicos por subgrupo\n");
-
-	int i = 1;
-	
-	while (!heap_esta_vacio(grupos)) {
-		printf("Subgrupo %d\n", i);
-		int* subgrupo = heap_desencolar(grupos);
-		printf("%d\n", *subgrupo);
-		free(subgrupo);
-		i++;
-	}
-
-	heap_destruir(grupos, NULL);
-}
-
-/* *****************************
- *          SUBGRUPOS
- * ****************************/
+#include "grafo.h"
+#include "lista.h"
+#include "heap.h"
 
 // Calcula las componentes conexas del grafo.
 heap_t* calcular_subgrupos(grafo_t* grafo) {
@@ -59,4 +40,31 @@ heap_t* calcular_subgrupos(grafo_t* grafo) {
 	
 	return componentes;
 }
+
+/* *****************************
+ *          SUBGRUPOS
+ * ****************************/
+
+void subgrupos(grafo_t* grafo) {
+
+	heap_t* grupos = calcular_subgrupos(grafo);
+	
+	printf("La cantidad de subgrupos/componentes conexas es: %d\n",
+			(int)heap_cantidad(grupos));
+	
+	printf("Cantidad de musicos por subgrupo\n");
+
+	int i = 1;
+	
+	while (!heap_esta_vacio(grupos)) {
+		printf("Subgrupo %d\n", i);
+		int* subgrupo = heap_desencolar(grupos);
+		printf("%d\n", *subgrupo);
+		free(subgrupo);
+		i++;
+	}
+
+	heap_destruir(grupos, NULL);
+}
+
 
