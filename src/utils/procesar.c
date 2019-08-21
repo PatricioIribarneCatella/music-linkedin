@@ -1,3 +1,20 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "grafo.h"
+#include "lista.h"
+
+#include "comandos.h"
+
+#include "recomendar.h"
+#include "difundir.h"
+#include "centralidad.h"
+#include "camino.h"
+#include "diametro.h"
+#include "subgrafos.h"
+#include "articulacion.h"
+#include "agrupamiento.h"
+
 /* ******************************************************************
  *                         PROCESAR LINEA
  * *****************************************************************/
