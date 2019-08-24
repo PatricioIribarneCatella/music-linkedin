@@ -1,5 +1,7 @@
 # TP-Music-Linkedin
 
+Mínima aplicación del estilo _LinkedIn_ para músicos (Algoritmos y Programación II _FIUBA_)
+
 ### Compilar
 
 ```bash
