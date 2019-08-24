@@ -3,7 +3,7 @@
 ### Compilar
 
 ```bash
- $ mkdir build
+ $ ./clean.sh
  
  $ cd build
  
