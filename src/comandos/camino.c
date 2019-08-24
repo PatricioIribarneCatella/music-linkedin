@@ -4,7 +4,7 @@
 #include "grafo.h"
 #include "lista.h"
 
-#include "bfs.h"
+#include "recorrido.h"
 
 /* **************
  *    CAMINO

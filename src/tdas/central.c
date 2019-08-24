@@ -1,15 +1,6 @@
-/* ******************************************************************
- *                DEFINICION DE LOS TIPOS DE DATOS
- * *****************************************************************/
+#include <stdlib.h>
 
-typedef struct central {
-	int* vertice;
-	int* apariciones;
-} central_t;
-
-/* ******************************************************************
- *                       FUNCIONES AUXILIARES
- * *****************************************************************/
+#include "central.h"
 
 // Destruye la estructura de central.
 void destruir_central(void* dato) {

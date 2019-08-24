@@ -1,28 +1,35 @@
-/* *****************************
- *          ANALIZAR
- * ****************************/
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 
-// Analiza la informacion difundida y
-// devuelve una lista con los vértices
-// en los cuales se difundio la misma.
-lista_t* analizar_informacion(bool* informacion, int tam) {
+#include "grafo.h"
+#include "lista.h"
 
-	lista_t* lista = lista_crear();
+#include "utils.h"
+#include "tarjam.h"
+#include "visitar.h"
+#include "inicializar.h"
+#include "destruir.h"
 
-	for (int i = 0; i < tam; i++) {
+// Devuelve un vértice no visitado aún
+// a partir del arreglo de visitados.
+char* obtener_vertice(bool* visitados, size_t tam) {
 
-		if (informacion[i]) {
-			
-			int* j = malloc(sizeof(int));
-			*j = i;
-			lista_insertar_primero(lista, j);
-		}
-	}
-
-	free(informacion);
+	size_t i = 0;
 	
-	return lista;
+	while (i < tam) {
+
+		if (!visitados[i])
+			return itoa(i, 10);
+		i++;
+	}
+	
+	return NULL;
 }
+
+/* *****************************
+ *          SUBGRAFOS
+ * ****************************/
 
 // Analiza a partir de un vertice la componente conexa asociada.
 int analizar_vertice(grafo_t* grafo, lista_t* cola_BFS, bool* visitados) {
@@ -55,8 +62,12 @@ int analizar_vertice(grafo_t* grafo, lista_t* cola_BFS, bool* visitados) {
 	return contador;
 }
 
+/* *****************************
+ *          DIFUNDIR
+ * ****************************/
+
 // Analiza si un vertice debe enterarse de la informacion o no.
-void analizar_vertice_difundir(grafo_t* grafo,
+static void analizar_vertice_difundir(grafo_t* grafo,
 				char* vertice,
 				lista_t* adyacentes,
 				bool* informacion) {
@@ -81,7 +92,7 @@ void analizar_vertice_difundir(grafo_t* grafo,
 }
 
 // Verifica si un vertice ya se enteró de la informacion a difundir.
-bool difundido(bool* informacion, char* vertice) {
+static bool difundido(bool* informacion, char* vertice) {
 
 	return informacion[atoi(vertice)];
 }
@@ -133,10 +144,36 @@ void analizar_componente_a_difundir(grafo_t* grafo, lista_t* cola_BFS, char* ver
 	}
 }
 
+// Analiza la informacion difundida y
+// devuelve una lista con los vértices
+// en los cuales se difundio la misma.
+lista_t* analizar_informacion(bool* informacion, int tam) {
+
+	lista_t* lista = lista_crear();
+
+	for (int i = 0; i < tam; i++) {
+
+		if (informacion[i]) {
+			
+			int* j = malloc(sizeof(int));
+			*j = i;
+			lista_insertar_primero(lista, j);
+		}
+	}
+
+	free(informacion);
+	
+	return lista;
+}
+
+/* *****************************
+ *        ARTICULACION
+ * ****************************/
+
 // Cuenta cuántos hijos de un vértice del
 // arbol DFS cumplen con la relación que
 // los convierte en puntos de articulacion.
-int contar_vertices(int* padre, int* orden,
+static int contar_vertices(int* padre, int* orden,
 			int* mas_alto,
 			char* vertice,
 			int tam) {
@@ -158,7 +195,7 @@ int contar_vertices(int* padre, int* orden,
 // Analiza qué puntos son de articulación
 // a partir de la información proporcionada
 // por el algoritmo de Tarjam.
-void analizar_articulacion(bool* puntos_articulacion,
+static void analizar_articulacion(bool* puntos_articulacion,
 			   char* vertice,
 			   int* padre,
 			   int* orden,
@@ -197,20 +234,6 @@ void analizar_articulacion(bool* puntos_articulacion,
 	lista_iter_destruir(iter);
 }
 
-// Devuelve un vértice no visitado aún
-// a partir del arreglo de visitados.
-char* obtener_vertice(bool* visitados, size_t tam) {
-
-	size_t i = 0;
-	
-	while (i < tam) {
-
-		if (!visitados[i]) return itoa(i, 10);
-		i++;
-	}
-	
-	return NULL;
-}
 
 // Analiza si hay puntos de articulación en el grafo
 // usando el algoritmo de Tarjam para numerar

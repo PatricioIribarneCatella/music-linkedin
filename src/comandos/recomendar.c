@@ -6,6 +6,8 @@
 #include "lista.h"
 #include "heap.h"
 
+#include "comparar.h"
+
 // Devuelve una lista con las posibles recomendaciones para el vertice.
 static lista_t* posibles_recomendaciones(grafo_t* grafo, char* vertice) {
 

@@ -5,13 +5,7 @@
 #include "grafo.h"
 #include "lista.h"
 
-// Calcula los puntos de articulacion del grafo.
-static lista_t* calcular_puntos_articulacion(grafo_t* grafo) {
-
-	bool* puntos = analizar_puntos(grafo);
-
-	return extraer_puntos(puntos, (int)grafo_cantidad_vertices(grafo));
-}
+#include "analizar.h"
 
 // Devuelve una lista con los puntos de articulación
 // teniendo en cuenta un arreglo de bool.
@@ -32,6 +26,14 @@ static lista_t* extraer_puntos(bool* puntos, int tam) {
 	free(puntos);
 	
 	return lista;
+}
+
+// Calcula los puntos de articulacion del grafo.
+static lista_t* calcular_puntos_articulacion(grafo_t* grafo) {
+
+	bool* puntos = analizar_puntos(grafo);
+
+	return extraer_puntos(puntos, (int)grafo_cantidad_vertices(grafo));
 }
 
 /* *****************************

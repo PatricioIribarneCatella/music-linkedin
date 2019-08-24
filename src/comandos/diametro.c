@@ -5,34 +5,11 @@
 #include "lista.h"
 #include "vector.h"
 
-#include "bfs.h"
-
-// Devuelve una lista con los vertices que componen
-// el camino maximo de todos los caminos minimos.
-lista_t* calcular_diametro(grafo_t* grafo) {
-
-	vector_t* caminos = calcular_caminos(grafo);
-	lista_t* camino_max = camino_diametro(caminos);
-	
-	destruir_vector(caminos);
-	
-	return camino_max;
-}
-
-// A partir de todos los caminos minimos, busca el que posee mayor largo.
-lista_t* camino_diametro(vector_t* caminos) {
-
-	int pos_maximo = camino_maximo(caminos);
-	
-	lista_t* maximo = vector_obtener(caminos, pos_maximo);
-	
-	lista_t* lista = lista_copiar(maximo);
-	
-	return lista;
-}
+#include "recorrido.h"
+#include "destruir.h"
 
 // Devuelve la posicion donde se encuentra el camino mas largo.
-int camino_maximo(vector_t* caminos) {
+static int camino_maximo(vector_t* caminos) {
 
 	int pos = 0; int i = 0; size_t largo;
 
@@ -51,6 +28,30 @@ int camino_maximo(vector_t* caminos) {
 	}
 
 	return pos;
+}
+
+// A partir de todos los caminos minimos, busca el que posee mayor largo.
+static lista_t* camino_diametro(vector_t* caminos) {
+
+	int pos_maximo = camino_maximo(caminos);
+	
+	lista_t* maximo = vector_obtener(caminos, pos_maximo);
+	
+	lista_t* lista = lista_copiar(maximo);
+	
+	return lista;
+}
+
+// Devuelve una lista con los vertices que componen
+// el camino maximo de todos los caminos minimos.
+static lista_t* calcular_diametro(grafo_t* grafo) {
+
+	vector_t* caminos = calcular_caminos(grafo);
+	lista_t* camino_max = camino_diametro(caminos);
+	
+	destruir_vector(caminos);
+	
+	return camino_max;
 }
 
 /* *****************************

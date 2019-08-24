@@ -5,8 +5,13 @@
 #include "lista.h"
 #include "heap.h"
 
+#include "analizar.h"
+#include "comparar.h"
+#include "visitar.h"
+#include "inicializar.h"
+
 // Calcula las componentes conexas del grafo.
-heap_t* calcular_subgrupos(grafo_t* grafo) {
+static heap_t* calcular_subgrupos(grafo_t* grafo) {
 
 	lista_t* cola_BFS = lista_crear();
 	bool* visitados = inicializar_visitados(grafo);

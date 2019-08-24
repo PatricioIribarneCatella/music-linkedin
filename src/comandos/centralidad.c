@@ -4,16 +4,10 @@
 #include "grafo.h"
 #include "lista.h"
 #include "heap.h"
+#include "central.h"
 
 #include "bc.h"
-
-// Devuelve una lista con los vertices mas centrales.
-static lista_t* centralidad_grafo(grafo_t* grafo, char* cantidad) {
-
-	int* centrales = calcular_centralidad(grafo);
-
-	return extraer_mas_centrales(centrales, cantidad, grafo_cantidad_vertices(grafo));
-}
+#include "comparar.h"
 
 // Extrae a partir del arreglo de centrales la cantidad pedida.
 static lista_t* extraer_mas_centrales(int* centrales, char* cantidad, int tam) {
@@ -68,6 +62,14 @@ static lista_t* extraer_mas_centrales(int* centrales, char* cantidad, int tam) {
 	free(centrales);
 	
 	return lista;
+}
+
+// Devuelve una lista con los vertices mas centrales.
+static lista_t* centralidad_grafo(grafo_t* grafo, char* cantidad) {
+
+	int* centrales = calcular_centralidad(grafo);
+
+	return extraer_mas_centrales(centrales, cantidad, grafo_cantidad_vertices(grafo));
 }
 
 /* *****************************

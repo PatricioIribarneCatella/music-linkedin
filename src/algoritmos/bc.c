@@ -3,8 +3,10 @@
 
 #include "grafo.h"
 #include "lista.h"
+#include "pila.h"
 
-#include "incializar.h"
+#include "inicializar.h"
+#include "destruir.h"
 
 /* *****************************
  *     BRANDES (Centralidad)

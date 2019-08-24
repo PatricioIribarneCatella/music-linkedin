@@ -5,7 +5,9 @@
 #include "grafo.h"
 #include "lista.h"
 
+#include "inicializar.h"
 #include "analizar.h"
+#include "visitar.h"
 
 // Defunde la informacion en el grafo.
 static bool* difundir_informacion(grafo_t* grafo, lista_t* lista, int tam) {

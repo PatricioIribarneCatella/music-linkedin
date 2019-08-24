@@ -1,8 +1,11 @@
+#include "central.h"
+
 /* *****************************
  *         COMPARACION
  * ****************************/
 
-// Función de comparación 1 (heap de minimos).
+// Función de comparación 1
+// (heap de mínimos).
 int cmp1(const void *a, const void *b) {
 
 	int* c = (int*)a;
@@ -16,7 +19,8 @@ int cmp1(const void *a, const void *b) {
 		return 0;
 }
 
-// Funcion de comparacion 2 (heap de maximos).
+// Función de comparacioón 2
+// (heap de máximos).
 int cmp2(const void *a, const void *b) {
 
 	int c = *(int*)a;
@@ -30,7 +34,8 @@ int cmp2(const void *a, const void *b) {
 		return 0;
 }
 
-// Funcion de comparacion 3 (heap de maximos guardando estructura central).
+// Función de comparación 3
+// (heap de máximos guardando estructura central).
 int cmp3(const void *a, const void *b) {
 
 	central_t* c = (central_t*)a;
